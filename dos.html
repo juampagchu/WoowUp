@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ejercicio 2</title>
+  <link href="bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="px-5 col-6 mx-auto">
+      <div class="px-5 col-10 mx-auto" id="frm-login">
+        <h3 class="text-dark my-0 text-center">Ejercicio 2</h3>
+        <form class="mt-5 mb-4" role="form" action="#">
+            <div class="form-group">
+                <label class="text-dark">Archivo</label>
+                <input type="file" accept=".json" id="file" class="form-control" required="">
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>Nombre</th>
+                  <th>fecha de recompra</th>
+                  <th style="width: 40px">Atípicos</th>
+                </tr>
+                </thead>
+                <tbody id="dataTable"></tbody>
+            </table>
+            <div class="form-group">
+                <button onclick="SubirAjax();" class="btn btn-primary btn-lg btn-block" type="button">Continuar</button>
+            </div>
+            <a href="ejercicio2/testdos.php">Tests</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="jquery-3.1.1.min.js"></script>
+  <script src="bootstrap.js"></script>
+  <script type="text/javascript">
+    function SubirAjax(){
+        if(!$('#file')[0].files[0]){ alert("Debes subir un archivo .json"); return false; }
+        var formData = new FormData();
+        formData.append('file', $('#file')[0].files[0]);
+        $.ajax({
+          url : 'ejercicio2/dos.php',
+          type : 'POST',
+          data : formData,
+          processData: false,
+          contentType: false,
+          success : function(data) {
+            var htmlTableBody = "";
+            for(producto of data){
+              htmlTableBody += "<tr><td>"+producto["id"]+"</td><td>"+producto["nombre"]+"</td><td>"+producto["proxima"]+"</td><td>"+producto["atipico"]+"</td></tr>";
+            }
+            $("#dataTable").html(htmlTableBody);
+          },
+          error: function(result){
+            $("#dataTable").html('<tr><td class="bg-danger text-white text-center" colspan="4">'+result.responseText+'</td></tr>');
+          }
+        });
+    }
+  </script>
+</body>
+</html>

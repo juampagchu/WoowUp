@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ejercicio 1 </title>
+  <link href="bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="px-5 col-6 mx-auto">
+      <div class="px-5 col-10 mx-auto" id="frm-login">
+        <h3 class="text-dark my-0 text-center">Ejercicio 1 </h3>
+        <form class="mt-5 mb-4" role="form" action="#">
+            <div class="form-group">
+                <label class="text-dark">Escalones</label>
+                <input type="number" id="escalones" class="form-control" required="">
+            </div>
+            <div class="form-group">
+                <label class="text-dark">Resultado</label>
+                <h5 id="resultado"></h5>
+            </div>
+            <div class="form-group">
+                <button onclick="ConsultarConvinaciones()" class="btn btn-primary btn-lg btn-block" type="button">Continuar</button>
+            </div>
+            <a href="ejercicio1/testuno.php">Tests</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="jquery-3.1.1.min.js"></script>
+  <script src="bootstrap.js"></script>
+  <script type="text/javascript">
+    function ConsultarConvinaciones(){  
+      var escalones = $("#escalones").val();
+      if(escalones.trim().length == 0){
+        MostrarResp("Debes ingresar la cantidad de escalones.",true);
+        return false;
+      }
+      $.ajax({
+        url: "ejercicio1/uno.php",
+        data:{
+          escalones:escalones
+        },
+        success: function(result){
+          if (result && result!="") {
+            MostrarResp(result);
+          }
+        },
+        error: function(result){
+          MostrarResp(result.responseText,true);
+        }
+      });
+    }
+
+    function MostrarResp(texto,error){
+      $("#resultado").attr("class","bg-"+((error)? "danger":"success")+" p-3 rounded rounded-pill text-white text-center");
+      $("#resultado").html(texto);
+    }
+  </script>
+</body>
+</html>
